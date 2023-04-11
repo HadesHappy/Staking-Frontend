@@ -1,0 +1,26 @@
+body,div,dl,dt,dd,menu,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td {
+	margin:0;
+	padding:0;
+  -webkit-appearance: none;
+  border-radius: 0px;
+}
+
+address,caption,cite,code,dfn,em,strong,th,var,i,b {
+	font-style:normal !important;
+	font-weight:normal;
+}
+ol,ul,menu {
+	list-style:none;
+
+}
+h1,h2,h3,h4,h5,h6 {
+	font-size:100%;
+	font-weight:normal;
+}
+
+a {text-decoration: none; color: inherit;}
+
+*:hover {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-transform: none;
+}

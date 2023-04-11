@@ -1,0 +1,26 @@
+/* Passenger Sans */
+
+@font-face {
+  font-family: 'Passenger Sans Semibold';
+  src: url('fonts/PassengerSans-Semibold.woff2') format('woff2'),
+       url('fonts/PassengerSans-Semibold.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Passenger Sans Bold';
+  src: url('fonts/PassengerSans-Bold.woff2') format('woff2'),
+       url('fonts/PassengerSans-Bold.woff') format('woff');
+}
+
+/* Suisse Intl */
+
+@font-face {
+  font-family: 'Suisse Intl Regular';
+  src: url('fonts/SuisseIntl-Regular.woff2') format('woff2'),
+       url('fonts/SuisseIntl-Regular.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Suisse Intl Book';
+  src: url('fonts/SuisseIntl-Book.otf') format('opentype');
+}
