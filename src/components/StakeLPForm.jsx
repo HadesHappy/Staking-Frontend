@@ -23,6 +23,7 @@ const StakeLPForm = ({ setIsModalVisible }) => {
   const getTokenAllowance = async () => {
     try {
       const lpAllowance = await getLPTokenAllowance(address)
+      console.log('lpAllowance: ', lpAllowance)
       setAllowance(lpAllowance)
       if (formatEther(lpAllowance) < amount)
         setIsApproved(false)
@@ -41,6 +42,7 @@ const StakeLPForm = ({ setIsModalVisible }) => {
     try {
       setLoading(true)
       const response = await approveLp(amount)
+      setLoading(false)
       if (response.status === 'Success') {
         toast.success('Succeed.')
         getTokenAllowance()
@@ -50,10 +52,8 @@ const StakeLPForm = ({ setIsModalVisible }) => {
         else
           toast.error('Transaction failed by unknown reason.')
       }
-      setLoading(false)
     } catch (error) {
       console.log(error)
-      getTokenAllowance()
     }
   }
 
@@ -62,8 +62,11 @@ const StakeLPForm = ({ setIsModalVisible }) => {
       if (amount > 0 && amount <= Number(data.displayValue)) {
         setLoading(true)
         const response = await stakeLp(amount)
+        setLoading(false)
         if (response.status === 'Success') {
           toast.success('Succeed.')
+          dispatch(stakeLpInfo())
+          dispatch(getPersonalLpInfo(address))
           setIsModalVisible(false)
         } else {
           if (response.status === 'Error')
@@ -71,9 +74,6 @@ const StakeLPForm = ({ setIsModalVisible }) => {
           else
             toast.error('Transaction failed by unknown reason.')
         }
-        dispatch(stakeLpInfo())
-        dispatch(getPersonalLpInfo(address))
-        setLoading(false)
       } else {
         if (amount === '0')
           toast.error('Error: Invalid Input')
@@ -87,8 +87,13 @@ const StakeLPForm = ({ setIsModalVisible }) => {
   }
 
   const handleMaxClick = () => {
-    if (data && data?.displayValue)
+    if (data && data?.displayValue) {
       setAmount(data.displayValue)
+      if (formatEther(allowance) < data.displayValue)
+        setIsApproved(false)
+      else
+        setIsApproved(true)
+    }
     else
       setAmount(0)
   }
