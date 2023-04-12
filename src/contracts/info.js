@@ -25,19 +25,18 @@ import {
 
 const getContracts = () => {
   const provider = new ethers.providers.JsonRpcProvider(rpcUrl)
-
   const balanceContract = new ethers.Contract(updateBalance.address, updateBalance.abi, provider)
   const lsEthContract = new ethers.Contract(lsEth.address, lsEth.abi, provider)
   const ownerContract = new ethers.Contract(owner.address, owner.abi, provider)
   const lsdStakingContract = new ethers.Contract(lsdStaking.address, lsdStaking.abi, provider)
   const lpStakingContract = new ethers.Contract(lpStaking.address, lpStaking.abi, provider)
-  const lsdTokenContract = new ethers.Contract(lsdToken.address, lsdToken.abit, provider)
+  const lsdTokenContract = new ethers.Contract(lsdToken.address, lsdToken.abi, provider)
   const pairTokenContract = new ethers.Contract(pairToken.address, pairToken.abi, provider)
-
   return { balanceContract, lsEthContract, ownerContract, lsdStakingContract, lpStakingContract, lsdTokenContract, pairTokenContract }
 }
 
 const stakeEthInfo = () => async dispatch => {
+
   // Get contracts
   const { ownerContract, lsEthContract, balanceContract } = getContracts()
   try {

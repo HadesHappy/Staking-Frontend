@@ -54,7 +54,7 @@ const StakeLsdBlock = ({ setIsModalVisible, setCurrentWindow }) => {
           <span>Total Staked LSD</span>
           {
             lsdInfoLoading ?
-              <b>Loading...</b>
+              <b>0</b>
               :
               <b>{showBalance(lsdInfo.totalStaked)}</b>
           }
@@ -63,7 +63,7 @@ const StakeLsdBlock = ({ setIsModalVisible, setCurrentWindow }) => {
           <span>Total Rewards LSD</span>
           {
             lsdInfoLoading ?
-              <b>Loading...</b>
+              <b>0</b>
               :
               <b>{showBalance(lsdInfo.totalRewards)}</b>
           }

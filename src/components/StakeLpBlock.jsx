@@ -56,7 +56,7 @@ const StakeLpBlock = ({ data, setIsModalVisible, setCurrentWindow }) => {
           <span>Total Staked LP</span>
           {
             lpInfoLoading ?
-              <b>Loading...</b>
+              <b>0</b>
               :
               <b>{showRate(lpInfo.totalStaked)}</b>
           }
@@ -65,7 +65,7 @@ const StakeLpBlock = ({ data, setIsModalVisible, setCurrentWindow }) => {
           <span>Total Rewards LSD</span>
           {
             lpInfoLoading ?
-              <b>Loading...</b>
+              <b>0</b>
               :
               <b>{showBalance(lpInfo.totalRewards)}</b>
           }
