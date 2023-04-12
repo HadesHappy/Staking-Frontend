@@ -40,7 +40,7 @@ const LiquidityWindow = ({ setIsModalVisible }) => {
   const [allowance, setAllowance] = useState()
 
   const getAllowance = async () => {
-    const lsdAllowance = await getLSDTokenForLPAllowance()
+    const lsdAllowance = await getLSDTokenForLPAllowance(address)
     setAllowance(lsdAllowance)
     if (formatLsd(lsdAllowance) < amount2)
       setIsApproved(false)
@@ -97,6 +97,7 @@ const LiquidityWindow = ({ setIsModalVisible }) => {
     try {
       setLoading(true)
       const response = await approveLsdToLpStaking(amount2)
+      setLoading(false)
       if (response.status === 'Success') {
         toast.success('Succeed.')
         getAllowance()
@@ -106,7 +107,6 @@ const LiquidityWindow = ({ setIsModalVisible }) => {
         else
           toast.error('Transaction failed by unknown reason.')
       }
-      setLoading(false)
     } catch (error) {
       console.log(error)
       getAllowance()

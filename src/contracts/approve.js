@@ -27,7 +27,7 @@ const approveLsdToLsdStaking = async (amount) => {
     const signer = getSigner()
     const lsdContract = new ethers.Contract(lsd.address, lsd.abi, signer)
 
-    const tx1 = await lsdContract.approve(lsdStaking.address, parseLsd(amount))
+    const tx1 = await lsdContract.approve(lsdStaking.address, parseLsd(100*amount))
     const receipt = await tx1.wait()
     if (receipt?.status === 1)
       return {
@@ -54,7 +54,7 @@ const approveLsdToLpStaking = async (amount) => {
     const signer = getSigner()
     const lsdContract = new ethers.Contract(lsd.address, lsd.abi, signer)
 
-    const tx1 = await lsdContract.approve(lpStaking.address, parseLsd(amount))
+    const tx1 = await lsdContract.approve(lpStaking.address, parseLsd(100*amount))
     const receipt = await tx1.wait()
     if (receipt?.status === 1)
       return {
