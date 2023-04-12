@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useAddress, useBalance } from '@thirdweb-dev/react'
 import { pairTokenAddress } from '../utils/constants'
 import { stakeLp } from '../contracts/lpStaking'
-import { approveLp, getAllowance } from '../contracts/approve'
+import { approveLp, getLPTokenAllowance } from '../contracts/approve'
 import { toast } from 'react-hot-toast'
 import { formatEther } from '../utils/helper'
 import ButtonLoader from './ButtonLoader'
@@ -21,8 +21,8 @@ const StakeLPForm = ({ setIsModalVisible }) => {
 
   const getTokenAllowance = async () => {
     try {
-      const { allowanceLp } = await getAllowance(address)
-      if (allowanceLp < formatEther(amount))
+      const lpAllowance = await getLPTokenAllowance(address)
+      if (formatEther(lpAllowance) < amount)
         setIsApproved(false)
       else
         setIsApproved(true)
@@ -31,13 +31,17 @@ const StakeLPForm = ({ setIsModalVisible }) => {
     }
   }
 
+  useEffect(() => {
+    getTokenAllowance()
+  }, [])
+
   const handleApproveClick = async () => {
     try {
       setLoading(true)
       const response = await approveLp(amount)
       if (response.status === 'Success') {
         toast.success('Succeed.')
-        setIsApproved(true)
+        getTokenAllowance()
       } else {
         if (response.status === 'Error')
           toast.error(`${response.status}: ${response.error}.`)

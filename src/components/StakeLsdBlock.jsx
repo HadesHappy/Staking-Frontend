@@ -49,6 +49,12 @@ const StakeLsdBlock = ({ setIsModalVisible, setCurrentWindow }) => {
     }
   }
 
+  if (lsdInfo.isBonusPeriod > 0){
+    const dateObj = new Date(lsdInfo.isBonusPeriod * 1000)
+    const period = lsdInfo.bonusPeriod
+    
+  }
+
   return (
     <div className='stake-block'>
       <span className='stake-block__coin'>

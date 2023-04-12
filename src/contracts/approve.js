@@ -81,7 +81,6 @@ const approveLp = async (amount) => {
     const signer = getSigner()
     const pairContract = new ethers.Contract(pair.address, pair.abi, signer)
 
-    console.log(parseEther(amount))
     const tx1 = await pairContract.approve(lpStaking.address, parseEther(amount))
 
     const receipt = await tx1.wait()
@@ -105,22 +104,40 @@ const approveLp = async (amount) => {
   }
 }
 
-const getAllowance = async (address) => {
+const getLSDTokenAllowance = async (address) => {
   try {
-    const { lsdContract, pairContract } = getContracts()
+    const { lsdContract } = getContracts()
     // Get LSD token allowance to LSD Staking Contract
-    const allowanceToLsd = Number(await lsdContract.allowance(address, lsdStaking.address))
+    const lsdAllowance = await lsdContract.allowance(address, lsdStaking.address)
 
-    // Get LSD token allowance to LP Staking Contract
-    const allowanceToLp = Number(await lsdContract.allowance(address, lpStaking.address))
-
-    // Get LP token allowance
-    const allowanceLp = Number(await pairContract.allowance(address, lpStaking.address))
-
-    return { allowanceToLsd, allowanceToLp, allowanceLp }
+    return lsdAllowance
   } catch (error) {
     console.log(error)
   }
 }
 
-export { approveLsdToLsdStaking, approveLsdToLpStaking, approveLp, getAllowance }
+const getLSDTokenForLPAllowance = async (address) => {
+  try {
+    const { lsdContract } = getContracts()
+    // Get LSD token allowance to LSD Staking Contract
+    const lsdAllowance = await lsdContract.allowance(address, lpStaking.address)
+
+    return lsdAllowance
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const getLPTokenAllowance = async (address) => {
+  try {
+    const { pairContract } = getContracts()
+    // Get LP token allowance
+    const lpAllowance = await pairContract.allowance(address, lpStaking.address)
+
+    return lpAllowance
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export { approveLsdToLsdStaking, approveLsdToLpStaking, approveLp, getLSDTokenAllowance, getLSDTokenForLPAllowance, getLPTokenAllowance }

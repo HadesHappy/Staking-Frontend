@@ -7,7 +7,7 @@ import { usePrice } from '../hooks/usePrice'
 const DappFooter = () => {
   const dispatch = useDispatch()
   const ethAmount = useSelector(state => state.stakeEthReducer.ethInfo.ethAmount)
-  const lsdAmount = useSelector(state => state.stakeLsdReducer.lsdInfo.totalStaked)
+  const lsdInfo = useSelector(state => state.stakeLsdReducer.lsdInfo)
   const lpInfo = useSelector(state => state.stakeLpReducer.lpInfo)
 
   const { ethPrice, lsdPrice } = usePrice()
@@ -25,7 +25,7 @@ const DappFooter = () => {
           <span>{showBalance(ethAmount)}</span> ETH staking
         </li>
         <li>
-          <span>${showBalance(lsdPrice * lsdAmount)}</span> LSD Staked
+          <span>${showBalance(lsdPrice * lsdInfo.totalStaked)}</span> LSD Staked
         </li>
         {
           lpInfo.totalSupply ?
@@ -34,15 +34,14 @@ const DappFooter = () => {
             :
             <li>
               <span>$0.00</span> Liquidity Staked
-
             </li>
         }
-        <li>
-          <span>00</span> Stakers
-        </li>
         {/* <li>
-          <span>$0</span> Rewards distributed
+          <span>00</span> Stakers
         </li> */}
+        <li>
+          <span>${showBalance((lpInfo.totalRewards + lsdInfo.totalRewards) * lsdPrice)}</span> Rewards distributed
+        </li>
       </ul>
       <a href="" className='dapp-footer__supported'>
         A product by LSD Labs FZCO (Dubai)

@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { lsdTokenAddress, veLsdTokenAddress } from '../utils/constants'
 import { useBalance, useAddress } from '@thirdweb-dev/react'
 import { showBalance, formatLsd } from '../utils/helper'
 import { usePrice } from '../hooks/usePrice'
 import { stakeLsd, unstakeLsd } from '../contracts/lsdStaking'
-import { getAllowance, approveLsdToLsdStaking } from '../contracts/approve'
+import { getLSDTokenAllowance, approveLsdToLsdStaking } from '../contracts/approve'
 import { toast } from 'react-hot-toast'
 import ButtonLoader from './ButtonLoader'
 import { stakeLsdInfo, getPersonalLsdInfo } from '../contracts/info'
@@ -24,8 +24,8 @@ const StakeLsdWindow = ({ setIsModalVisible }) => {
 
   const getTokenAllowance = async () => {
     try {
-      const { allowanceLsd } = await getAllowance(address)
-      if (allowanceLsd < formatLsd(amount))
+      const lsdAllowance = await getLSDTokenAllowance(address)
+      if (formatLsd(lsdAllowance) < amount)
         setIsApproved(false)
       else
         setIsApproved(true)
@@ -49,7 +49,7 @@ const StakeLsdWindow = ({ setIsModalVisible }) => {
       const response = await approveLsdToLsdStaking(amount)
       if (response.status === 'Success') {
         toast.success('Succeed.')
-        setIsApproved(true)
+        getTokenAllowance()
       } else {
         if (response.status === 'Error')
           toast.error(`${response.status}: ${response.error}.`)
@@ -127,6 +127,10 @@ const StakeLsdWindow = ({ setIsModalVisible }) => {
     setAmount(e.target.value)
     getTokenAllowance()
   }
+
+  useEffect(() => {
+    getTokenAllowance()
+  }, [])
 
   return (
     <div className='stake-window'>
