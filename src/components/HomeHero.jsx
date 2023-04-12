@@ -13,7 +13,7 @@ const HomeHero = () => {
         </h1>
         <p className="hero__about">Staking with LSD keeps your assets liquid while you earn  passive income.</p>
         <footer className="hero__footer">
-          <Link to={'/dapp'}>Get started</Link>
+          <Link to={'/dapp/stake-eth'}>Get started</Link>
           <a href="https://liquid-staking-derivatives.gitbook.io/whitepaper" target="_blank"></a>
         </footer>
       </section>

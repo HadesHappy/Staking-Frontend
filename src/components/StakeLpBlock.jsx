@@ -26,7 +26,6 @@ const StakeLpBlock = ({ data, setIsModalVisible, setCurrentWindow }) => {
       dispatch(getPersonalLpInfo())
   }, [address])
 
-
   const handleClaimClick = async () => {
     if (address) {
       if (personalInfo.lsdEarned === 0) {

@@ -1,0 +1,20 @@
+.notification {
+  width: 300px;
+  position: absolute;
+  border: 1px solid #777b7e;
+  color: #8f9299;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  right: 50px;
+  background: #161616;
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {}
+
+@media (max-width: 1199px) {
+  .notification {
+    position: relative;
+    margin: auto;
+    right: auto;
+  }
+}

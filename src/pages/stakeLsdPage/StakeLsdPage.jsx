@@ -10,6 +10,8 @@ import LiquidityWindow from '../../components/LiquidityWindow';
 import StakeLsdBlock from '../../components/StakeLsdBlock';
 import '../dapp/dapp.css';
 import '../stake/stake.css';
+import '../stake/notification.css';
+
 import Tvl from '../../components/Tvl';
 
 const StakeLsdPage = () => {
@@ -21,6 +23,9 @@ const StakeLsdPage = () => {
   return (
     <>
       <main className='dapp'>
+        <div className='notification'>
+          Staking is paused. We have submitted our smart contracts for a security audit. Once completed, we will enable staking.
+        </div>
         <section className='dapp-section'>
           <SectionHeadTabs currentHeadTab={currentHeadTab} setCurrentHeadTab={setCurrentHeadTab} />
           <Tvl />
