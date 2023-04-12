@@ -61,18 +61,18 @@ const StakeLpBlock = ({ data, setIsModalVisible, setCurrentWindow }) => {
       } else {
         setLoading(true)
         const response = await claimByLp()
+        setLoading(false)
         if (response.status === 'Success') {
           toast.success('Succeed.')
+          dispatch(stakeLpInfo())
+          dispatch(getPersonalLpInfo())
         } else {
           if (response.status === 'Error')
             toast.error(`${response.status}: ${response.error}.`)
           else
             toast.error('Transaction failed by unknown reason.')
         }
-        dispatch(stakeLpInfo())
-        dispatch(getPersonalLpInfo())
-        setLoading(false)
-      }
+        }
     } else {
       toast.error('Connect your wallet.')
     }
