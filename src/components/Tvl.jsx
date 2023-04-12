@@ -1,5 +1,5 @@
 import '../pages/dapp/dapp.css';
-import { showBalance } from '../utils/helper';
+import { showTvl } from '../utils/helper';
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { stakeEthInfo, stakeLsdInfo, stakeLpInfo } from '../contracts/info'
@@ -30,7 +30,7 @@ const Tvl = () => {
           :
           <h1 className="dapp-section__title">
             <span>TVL</span>
-            {showBalance(ethAmount * ethPrice + lsdAmount * lsdPrice + lpInfo.totalStaked * lpInfo.poolEthAmount * ethPrice / (lpInfo.totalSupply))}
+            {showTvl(ethAmount * ethPrice + lsdAmount * lsdPrice + lpInfo.totalStaked * lpInfo.poolEthAmount * ethPrice / (lpInfo.totalSupply))}
           </h1>
       }
     </>

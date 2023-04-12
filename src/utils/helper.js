@@ -53,10 +53,18 @@ const showRate = (rate) => {
     return 0
 }
 
+const showTvl = (amount) => {
+  const reDot = /[.]/
+  let tvlString = amount + ''
+  const dotLocation = tvlString.search(reDot)
+  tvlString = tvlString.slice(0, dotLocation)
+  return tvlString
+}
 export {
   showAddress,
   showBalance,
   showRate,
+  showTvl,
   formatEther,
   parseEther,
   formatLsd,
