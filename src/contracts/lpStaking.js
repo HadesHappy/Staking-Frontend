@@ -58,7 +58,7 @@ const addLiquidity = async (amount1, amount2) => {
     const stakingContract = new ethers.Contract(lpStaking.address, lpStaking.abi, signer)
 
     const tx1 = await stakingContract.addLiquidity(parseLsd(amount2), {
-      value: amount1.toString()
+      value: Number(amount1)
     });
 
     const receipt = await tx1.wait()
