@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useAddress } from '@thirdweb-dev/react'
 import { toast } from 'react-hot-toast'
 import { claimByLsd } from '../contracts/lsdStaking'
 import { showBalance } from '../utils/helper'
 import { stakeLsdInfo, getPersonalLsdInfo } from '../contracts/info'
 import { useDispatch, useSelector } from 'react-redux'
+import ButtonLoader from './ButtonLoader'
 
 const StakeLsdBlock = ({ setIsModalVisible, setCurrentWindow }) => {
   const address = useAddress()
@@ -13,6 +14,7 @@ const StakeLsdBlock = ({ setIsModalVisible, setCurrentWindow }) => {
   const lsdInfoLoading = useSelector(state => state.stakeLsdReducer.lsdInfoLoading)
   const personalInfo = useSelector(state => state.stakeLsdReducer.personalInfo)
   const personalInfoLoading = useSelector(state => state.stakeLsdReducer.personalInfoLoading)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     dispatch(stakeLsdInfo())
@@ -28,6 +30,7 @@ const StakeLsdBlock = ({ setIsModalVisible, setCurrentWindow }) => {
       if (personalInfo.lsdEarned === 0) {
         toast.error('There is no LSD to claim.')
       } else {
+        setLoading(true)
         const response = await claimByLsd()
         if (response.status === 'Success') {
           toast.success('Succeed.')
@@ -37,6 +40,9 @@ const StakeLsdBlock = ({ setIsModalVisible, setCurrentWindow }) => {
           else
             toast.error('Transaction failed by unknown reason.')
         }
+        dispatch(stakeLsdInfo())
+        dispatch(getPersonalLsdInfo())
+        setLoading(false)
       }
     } else {
       toast.error('Connect your wallet.')
@@ -104,7 +110,9 @@ const StakeLsdBlock = ({ setIsModalVisible, setCurrentWindow }) => {
               :
               <b>{showBalance(personalInfo.lsdEarned)}</b>
           }
-          <button type='button' className='turquoise' onClick={handleClaimClick}>Claim</button>
+          <button type='button' className='turquoise' onClick={handleClaimClick}>
+            {loading === true && <ButtonLoader />}
+            Claim</button>
         </li>
       </ul>
       <ul className='stake-block__info'>
@@ -171,8 +179,8 @@ const StakeLsdBlock = ({ setIsModalVisible, setCurrentWindow }) => {
               <b>1 day 15 hours 14 minutes left</b>
               <p className='stake-block__info-item-progress'></p>
             </li>
-          :
-          <></>
+            :
+            <></>
         }
       </ul>
     </div>

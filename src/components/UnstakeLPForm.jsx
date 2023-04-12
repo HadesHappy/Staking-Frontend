@@ -15,6 +15,7 @@ const UnstakeLPForm = ({ setIsModalVisible }) => {
 
   const { data } = useBalance(pairTokenAddress)
   const [amount, setAmount] = useState()
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     dispatch(getPersonalLpInfo(address))
@@ -31,6 +32,7 @@ const UnstakeLPForm = ({ setIsModalVisible }) => {
   const handleUnstakeClick = async () => {
     try {
       if (amount > 0 && amount <= personalInfo.stakedAmount) {
+        setLoading(true)
         const response = await unstakeLp(amount)
         if (response.status === 'Success') {
           toast.success('Succeed.')
@@ -41,6 +43,9 @@ const UnstakeLPForm = ({ setIsModalVisible }) => {
           else
             toast.error('Transaction failed by unknown reason.')
         }
+        dispatch(stakeLpInfo())
+        dispatch(getPersonalLpInfo(address))
+        setLoading(false)
       } else {
         console.log(amount)
         if (amount === '0')
@@ -72,7 +77,7 @@ const UnstakeLPForm = ({ setIsModalVisible }) => {
           Cancel
         </button>
         <button type='button' className='purple' onClick={handleUnstakeClick}>
-          <ButtonLoader />
+          {loading && <ButtonLoader />}
           Unstake
         </button>
       </footer>

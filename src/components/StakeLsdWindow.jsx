@@ -7,12 +7,18 @@ import { stakeLsd, unstakeLsd } from '../contracts/lsdStaking'
 import { getAllowance, approveLsdToLsdStaking } from '../contracts/approve'
 import { toast } from 'react-hot-toast'
 import ButtonLoader from './ButtonLoader'
+import { stakeLsdInfo, getPersonalLsdInfo } from '../contracts/info'
+import { useDispatch } from 'react-redux'
 
 const StakeLsdWindow = ({ setIsModalVisible }) => {
+  const dispatch = useDispatch()
   const tabs = ['Stake', 'Unstake'];
+
+  const [loading, setLoading] = useState(false)
   const [activeTab, setActiveTab] = useState('Stake');
   const [isApproved, setIsApproved] = useState()
   const [amount, setAmount] = useState()
+
   const { lsdPrice } = usePrice()
   const address = useAddress()
 
@@ -39,6 +45,7 @@ const StakeLsdWindow = ({ setIsModalVisible }) => {
 
   const handleApproveClick = async () => {
     try {
+      setLoading(true)
       const response = await approveLsdToLsdStaking(amount)
       if (response.status === 'Success') {
         toast.success('Succeed.')
@@ -49,6 +56,8 @@ const StakeLsdWindow = ({ setIsModalVisible }) => {
         else
           toast.error('Transaction failed by unknown reason.')
       }
+
+      setLoading(false)
     } catch (error) {
       console.log(error)
       getTokenAllowance()
@@ -59,6 +68,7 @@ const StakeLsdWindow = ({ setIsModalVisible }) => {
     try {
       if (activeTab === 'Stake') {
         if (amount > 0 && amount <= Number(data.displayValue)) {
+          setLoading(true)
           const response = await stakeLsd(amount)
           if (response.status === 'Success') {
             toast.success('Succeed.')
@@ -69,6 +79,9 @@ const StakeLsdWindow = ({ setIsModalVisible }) => {
             else
               toast.error('Transaction failed by unknown reason.')
           }
+          dispatch(stakeLsdInfo())
+          dispatch(getPersonalLsdInfo(address))
+          setLoading(false)
         } else {
           if (amount === '0')
             toast.error('Error: Invalid Input')
@@ -77,6 +90,7 @@ const StakeLsdWindow = ({ setIsModalVisible }) => {
         }
       } else {
         if (amount > 0 && amount <= Number(data.displayValue)) {
+          setLoading(true)
           const response = await unstakeLsd(amount)
           if (response.status === 'Success') {
             toast.success('Succeed.')
@@ -86,6 +100,9 @@ const StakeLsdWindow = ({ setIsModalVisible }) => {
             else
               toast.error('Transaction failed by unknown reason.')
           }
+          dispatch(stakeLsdInfo())
+          dispatch(getPersonalLsdInfo(address))
+          setLoading(false)
         } else {
           if (amount === '0')
             toast.error('Error: Invalid Input')
@@ -145,12 +162,12 @@ const StakeLsdWindow = ({ setIsModalVisible }) => {
             {
               (isApproved && activeTab === 'Stake') || activeTab === 'Unstake' ?
                 <button type='button' className='stake-window__footer-confirm purple' onClick={handleConfirmClick}>
-                  <ButtonLoader />
+                  {loading && <ButtonLoader />}
                   Confirm
                 </button>
                 :
                 <button type='button' className='stake-window__footer-confirm purple' onClick={handleApproveClick}>
-                  <ButtonLoader />
+                  {loading && <ButtonLoader />}
                   Approve
                 </button>
             }

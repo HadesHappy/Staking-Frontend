@@ -13,5 +13,5 @@ export {
   lsEthTokenAddress,
   veLsdTokenAddress,
   pairTokenAddress,
-  lsdTokenVaultAddress
+  lsdTokenVaultAddress,
 }

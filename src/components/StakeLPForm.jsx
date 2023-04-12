@@ -6,10 +6,16 @@ import { approveLp, getAllowance } from '../contracts/approve'
 import { toast } from 'react-hot-toast'
 import { formatEther } from '../utils/helper'
 import ButtonLoader from './ButtonLoader'
+import { useDispatch } from 'react-redux'
+import { stakeLpInfo, getPersonalLpInfo } from '../contracts/info'
 
 const StakeLPForm = ({ setIsModalVisible }) => {
+  const dispatch = useDispatch()
+
   const [amount, setAmount] = useState()
+  const [loading, setLoading] = useState(false)
   const [isApproved, setIsApproved] = useState()
+
   const address = useAddress()
   const { data } = useBalance(pairTokenAddress)
 
@@ -27,6 +33,7 @@ const StakeLPForm = ({ setIsModalVisible }) => {
 
   const handleApproveClick = async () => {
     try {
+      setLoading(true)
       const response = await approveLp(amount)
       if (response.status === 'Success') {
         toast.success('Succeed.')
@@ -37,6 +44,7 @@ const StakeLPForm = ({ setIsModalVisible }) => {
         else
           toast.error('Transaction failed by unknown reason.')
       }
+      setLoading(false)
     } catch (error) {
       console.log(error)
       getTokenAllowance()
@@ -46,6 +54,7 @@ const StakeLPForm = ({ setIsModalVisible }) => {
   const handleConfirmClick = async () => {
     try {
       if (amount > 0 && amount <= Number(data.displayValue)) {
+        setLoading(true)
         const response = await stakeLp(amount)
         if (response.status === 'Success') {
           toast.success('Succeed.')
@@ -56,6 +65,9 @@ const StakeLPForm = ({ setIsModalVisible }) => {
           else
             toast.error('Transaction failed by unknown reason.')
         }
+        dispatch(stakeLpInfo())
+        dispatch(getPersonalLpInfo(address))
+        setLoading(false)
       } else {
         if (amount === '0')
           toast.error('Error: Invalid Input')
@@ -96,12 +108,12 @@ const StakeLPForm = ({ setIsModalVisible }) => {
         {
           isApproved ?
             <button type='button' className='stake-window__footer-confirm purple' onClick={handleConfirmClick}>
-              <ButtonLoader />
+              {loading && <ButtonLoader />}
               Confirm
             </button>
             :
             <button type='button' className='stake-window__footer-confirm purple' onClick={handleApproveClick}>
-              <ButtonLoader />
+              {loading && <ButtonLoader />}
               Approve
             </button>
         }

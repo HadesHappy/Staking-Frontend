@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useAddress } from '@thirdweb-dev/react'
 import { toast } from 'react-hot-toast'
 import { claimByLp } from '../contracts/lpStaking'
 import { showBalance, showRate } from '../utils/helper'
 import { stakeLpInfo, getPersonalLpInfo } from '../contracts/info'
 import { useDispatch, useSelector } from 'react-redux'
+import ButtonLoader from './ButtonLoader'
 
 const StakeLpBlock = ({ data, setIsModalVisible, setCurrentWindow }) => {
   const address = useAddress()
@@ -13,6 +14,8 @@ const StakeLpBlock = ({ data, setIsModalVisible, setCurrentWindow }) => {
   const lpInfoLoading = useSelector(state => state.stakeLpReducer.lpInfoLoading)
   const personalInfo = useSelector(state => state.stakeLpReducer.personalInfo)
   const personalInfoLoading = useSelector(state => state.stakeLpReducer.personalInfoLoading)
+
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     dispatch(stakeLpInfo())
@@ -29,6 +32,7 @@ const StakeLpBlock = ({ data, setIsModalVisible, setCurrentWindow }) => {
       if (personalInfo.lsdEarned === 0) {
         toast.error('There is no LSD to claim.')
       } else {
+        setLoading(true)
         const response = await claimByLp()
         if (response.status === 'Success') {
           toast.success('Succeed.')
@@ -38,6 +42,9 @@ const StakeLpBlock = ({ data, setIsModalVisible, setCurrentWindow }) => {
           else
             toast.error('Transaction failed by unknown reason.')
         }
+        dispatch(stakeLpInfo())
+        dispatch(getPersonalLpInfo())
+        setLoading(false)
       }
     } else {
       toast.error('Connect your wallet.')
@@ -113,7 +120,9 @@ const StakeLpBlock = ({ data, setIsModalVisible, setCurrentWindow }) => {
               :
               <b>{showBalance(personalInfo.lsdEarned)}</b>
           }
-          <button type='button' className='turquoise' onClick={handleClaimClick}>Claim</button>
+          <button type='button' className='turquoise' onClick={handleClaimClick}>
+            {loading === true && <ButtonLoader />}
+            Claim</button>
         </li>
       </ul>
       <ul className='stake-block__info'>

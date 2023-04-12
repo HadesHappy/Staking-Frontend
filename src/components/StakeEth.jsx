@@ -42,6 +42,7 @@ const StakeEth = ({ setIsModalVisible, setCurrentModal }) => {
             else
               toast.error('Transaction failed by unknown reason.')
           }
+          setLoading(false)
         } else {
           toast.error(`Input Value Error. your input is less than minimum deposit amount.`)
         }
@@ -69,6 +70,7 @@ const StakeEth = ({ setIsModalVisible, setCurrentModal }) => {
           else
             toast.error('Transaction failed by unknown reason.')
         }
+        setLoading(false)
       } else {
         if (inputValue === 0)
           toast.error('Invalid Input Value.')

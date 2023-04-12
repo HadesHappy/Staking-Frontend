@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { showBalance } from '../utils/helper'
 import { useSelector, useDispatch } from 'react-redux'
-import { stakeEthInfo, stakeLsdInfo } from '../contracts/info'
+import { stakeEthInfo, stakeLsdInfo, stakeLpInfo } from '../contracts/info'
 import { usePrice } from '../hooks/usePrice'
 
 const DappFooter = () => {
@@ -15,6 +15,7 @@ const DappFooter = () => {
   useEffect(() => {
     dispatch(stakeEthInfo())
     dispatch(stakeLsdInfo())
+    dispatch(stakeLpInfo())
   }, [])
 
   return (
@@ -29,7 +30,7 @@ const DappFooter = () => {
         {
           lpInfo.totalSupply ?
             <li>
-              <span>${showBalance(lpInfo.totalStaked * lpInfo.poolEthAmount * ethPrice / (lpInfo.totalSupply || 1))}</span> Liquidity Staked</li>
+              <span>${showBalance(lpInfo.totalStaked * lpInfo.poolEthAmount * ethPrice / (lpInfo.totalSupply))}</span> Liquidity Staked</li>
             :
             <li>
               <span>$0.00</span> Liquidity Staked
