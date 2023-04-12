@@ -11,6 +11,7 @@ import LiquidityWindow from '../../components/LiquidityWindow';
 import StakeLpBlock from '../../components/StakeLpBlock';
 import '../dapp/dapp.css';
 import '../stake/stake.css';
+import Tvl from '../../components/Tvl';
 
 const StakeLpPage = () => {
 
@@ -22,10 +23,7 @@ const StakeLpPage = () => {
       <main className='dapp'>
         <section className='dapp-section'>
           <SectionHeadTabs />
-          <h1 className="dapp-section__title">
-            <span>TVL</span>
-            {showBalance(0)}
-          </h1>
+          <Tvl />
           <p className="dapp-section__about">Dollar value of total assets staked</p>
         </section>
         <div className='stake-tabs'>

@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import SectionHeadTabs from '../../components/SectionHeadTabs';
-import { showBalance } from '../../utils/helper';
 import DappFooter from '../../components/DappFooter';
 import ModalWindow from '../../components/ModalWindow';
 import SelectToken from '../../components/SelectToken';
@@ -11,6 +10,7 @@ import LiquidityWindow from '../../components/LiquidityWindow';
 import StakeLsdBlock from '../../components/StakeLsdBlock';
 import '../dapp/dapp.css';
 import '../stake/stake.css';
+import Tvl from '../../components/Tvl';
 
 const StakeLsdPage = () => {
 
@@ -23,10 +23,7 @@ const StakeLsdPage = () => {
       <main className='dapp'>
         <section className='dapp-section'>
           <SectionHeadTabs currentHeadTab={currentHeadTab} setCurrentHeadTab={setCurrentHeadTab} />
-          <h1 className="dapp-section__title">
-            <span>TVL</span>
-            {showBalance(0)}
-          </h1>
+          <Tvl />
           <p className="dapp-section__about">Dollar value of total assets staked</p>
         </section>
         <div className='stake-tabs'>
