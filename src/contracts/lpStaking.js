@@ -55,7 +55,8 @@ const unstakeLp = async (amount) => {
 const addLiquidity = async (amount1, amount2) => {
   try {
     const signer = getSigner()
-
+    console.log('amount1: ', amount1)
+    console.log('amount2: ', amount2)
     const stakingContract = new ethers.Contract(lpStaking.address, lpStaking.abi, signer)
 
     const tx1 = await stakingContract.addLiquidity(parseLsd(amount2), {

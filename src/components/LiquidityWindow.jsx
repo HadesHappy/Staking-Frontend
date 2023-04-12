@@ -69,8 +69,11 @@ const LiquidityWindow = ({ setIsModalVisible }) => {
       if (amount1 > 0 && amount2 > 0) {
         setLoading(true)
         const response = await addLiquidity(amount1, amount2)
+        setLoading(false)
         if (response.status === 'Success') {
           toast.success('Succeed.')
+          dispatch(stakeLpInfo())
+          dispatch(getPersonalLpInfo(address))
           setIsModalVisible(false)
         } else {
           if (response.status === 'Error')
@@ -78,9 +81,6 @@ const LiquidityWindow = ({ setIsModalVisible }) => {
           else
             toast.error('Transaction failed by unknown reason.')
         }
-        dispatch(stakeLpInfo())
-        dispatch(getPersonalLpInfo(address))
-        setLoading(false)
       } else {
         if (amount1 === '0')
           toast.error('Error: Invalid Input')
