@@ -58,14 +58,13 @@ const showTvl = (amount) => {
   let tvlString = amount + ''
   const dotLocation = tvlString.search(reDot)
   tvlString = tvlString.slice(0, dotLocation)
-  let string
   if (isNonEmptyString(tvlString) && tvlString.length % 4 === 0 && tvlString.slice(-1) !== ",") {
     let index = tvlString.length - 1;
     tvlString = addStr(tvlString, index, ",");
     return tvlString
   }
   else
-    return string
+    return tvlString
 }
 
 function addStr(str, index, stringToAdd) {
