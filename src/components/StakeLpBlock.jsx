@@ -1,119 +1,118 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useAddress } from '@thirdweb-dev/react'
 import { toast } from 'react-hot-toast'
-import { claimByLp, claimByLsd } from '../contracts/stake'
-import { showBalance } from '../utils/helper'
+import { claimByLp } from '../contracts/lpStaking'
+import { showBalance, showRate } from '../utils/helper'
+import { stakeLpInfo, getPersonalLpInfo } from '../contracts/info'
+import { useDispatch, useSelector } from 'react-redux'
 
-const StakeBlock = ({ data, setIsModalVisible, setCurrentWindow }) => {
+const StakeLpBlock = ({ data, setIsModalVisible, setCurrentWindow }) => {
   const address = useAddress()
+  const dispatch = useDispatch()
+  const lpInfo = useSelector(state => state.stakeLpReducer.lpInfo)
+  const lpInfoLoading = useSelector(state => state.stakeLpReducer.lpInfoLoading)
+  const personalInfo = useSelector(state => state.stakeLpReducer.personalInfo)
+  const personalInfoLoading = useSelector(state => state.stakeLpReducer.personalInfoLoading)
+
+  useEffect(() => {
+    dispatch(stakeLpInfo())
+  }, [])
+
+  useEffect(() => {
+    if (address)
+      dispatch(getPersonalLpInfo())
+  }, [address])
+
+
   const handleClaimClick = async () => {
     if (address) {
-      if (data.yourStakedBtn === 'Stake') {
-        if (data.lsdEarned === 0) {
-          toast.error('There is no LSD to claim.')
-        } else {
-          const response = await claimByLsd()
-          if (response.status === 'Success') {
-            toast.success('Succeed.')
-          } else {
-            if (response.status === 'Error')
-              toast.error(`${response.status}: ${response.error}.`)
-            else
-              toast.error('Transaction failed by unknown reason.')
-          }
-        }
+      if (personalInfo.lsdEarned === 0) {
+        toast.error('There is no LSD to claim.')
       } else {
-        if (data.lsdEarned === 0) {
-          toast.error('There is no LSD to claim.')
+        const response = await claimByLp()
+        if (response.status === 'Success') {
+          toast.success('Succeed.')
         } else {
-          const response = await claimByLp()
-          if (response.status === 'Success') {
-            toast.success('Succeed.')
-          } else {
-            if (response.status === 'Error')
-              toast.error(`${response.status}: ${response.error}.`)
-            else
-              toast.error('Transaction failed by unknown reason.')
-          }
+          if (response.status === 'Error')
+            toast.error(`${response.status}: ${response.error}.`)
+          else
+            toast.error('Transaction failed by unknown reason.')
         }
       }
     } else {
       toast.error('Connect your wallet.')
     }
-
   }
+
   return (
     <div className='stake-block'>
       <span className='stake-block__coin'>
-        {
-          data.img.length === 1 ?
-            <>
-              <img src={data.img[0]} alt='data' />
-              <i>{data.coinName}</i>
-            </>
-            :
-            <>
-              {
-                data.img.map((item) => <img src={item} key={item} alt='data-img' />)
-              }
-              <i>LSD + {data.coinName}</i>
-            </>
-        }
+        <img src="/img/coins/lseth.png" alt='data-img' />
+        <img src="/img/coins/eth.png" alt='eth-img' />
+        <i>LSD + ETH</i>
       </span>
       <ul className='stake-block__total'>
         <li className='stake-block__total-item'>
-          <span>Total Staked {data.coinAbbr}</span>
-          <b>{data.totalStaked}</b>
+          <span>Total Staked LP</span>
+          {
+            lpInfoLoading ?
+              <b>Loading...</b>
+              :
+              <b>{showRate(lpInfo.totalStaked)}</b>
+          }
         </li>
         <li className='stake-block__total-item'>
           <span>Total Rewards LSD</span>
-          <b>{showBalance(data.totalRewards)}</b>
+          {
+            lpInfoLoading ?
+              <b>Loading...</b>
+              :
+              <b>{showBalance(lpInfo.totalRewards)}</b>
+          }
         </li>
       </ul>
       <ul className='stake-block__your'>
         <li className='stake-block__your-item'>
           <p>
-            <span>Your Staked {data.coinAbbr}</span>
+            <span>Your Staked LP</span>
           </p>
-          <b>{data.yourStakedAmount}</b>
           {
-            data.isAddLiquidity &&
-            <button onClick={() => {
-              setIsModalVisible(true);
-              setCurrentWindow('liquidity')
-            }}
+            personalInfoLoading ?
+              <b>0</b>
+              :
+              <b>{showRate(personalInfo.stakedAmount)}</b>
+          }
+          <button onClick={() => {
+            setIsModalVisible(true);
+            setCurrentWindow('liquidity')
+          }}
           >
             Add Liquidity
           </button>
-          }
+
           <button
             onClick={() => {
-              if (data.yourStakedBtn === 'Stake') {
-                if (address) {
-                  setIsModalVisible(true);
-                  setCurrentWindow('stake')
-                } else {
-                  toast.error('Connect your wallet.')
-                }
-
+              if (address) {
+                setIsModalVisible(true);
+                setCurrentWindow('add-liquidity')
               } else {
-                if (address) {
-                  setIsModalVisible(true);
-                  setCurrentWindow('add-liquidity')
-                } else {
-                  toast.error('Connect your wallet.')
-                }
+                toast.error('Connect your wallet.')
               }
             }}
           >
-            {data.yourStakedBtn}
+            Stake LP
           </button>
         </li>
         <li className='stake-block__your-item'>
           <p>
             <span>LSD Earned</span>
           </p>
-          <b>{data.lsdEarned}</b>
+          {
+            personalInfoLoading ?
+              <b>0</b>
+              :
+              <b>{showBalance(personalInfo.lsdEarned)}</b>
+          }
           <button type='button' className='turquoise' onClick={handleClaimClick}>Claim</button>
         </li>
       </ul>
@@ -125,7 +124,12 @@ const StakeBlock = ({ data, setIsModalVisible, setCurrentWindow }) => {
             </svg>
             Your earning
           </span>
-          <b>{showBalance(data.footer.earning)}</b>
+          {
+            personalInfoLoading ?
+              <b>0</b>
+              :
+              <b>{showBalance(personalInfo.earning)}</b>
+          }
         </li>
         <li className='stake-block__info-item'>
           <span>
@@ -139,9 +143,14 @@ const StakeBlock = ({ data, setIsModalVisible, setCurrentWindow }) => {
                 </clipPath>
               </defs>
             </svg>
-            APR({data.coinAbbr})
+            APR(LP)
           </span>
-          <b>{data.footer.bonus}</b>
+          {
+            lpInfoLoading ?
+              <b>20</b>
+              :
+              <b>{lpInfo.mainApr}</b>
+          }
         </li>
         <li className='stake-block__info-item'>
           <span>
@@ -155,18 +164,28 @@ const StakeBlock = ({ data, setIsModalVisible, setCurrentWindow }) => {
                 </clipPath>
               </defs>
             </svg>
-            Bonus APR(LSD)
+            Bonus APR(LP)
           </span>
-          <b>{data.footer.apr}</b>
+          {
+            lpInfoLoading ?
+              <b>50</b>
+              :
+              <b>{lpInfo.bonusApr}</b>
+          }
         </li>
-        <li className='stake-block__info-item'>
-          <span>Bonus is Active now</span>
-          <b>1 day 15 hours 14 minutes left</b>
-          <p className='stake-block__info-item-progress'></p>
-        </li>
+        {
+          !lpInfoLoading && lpInfo.isBonusPeriod ?
+            <li className='stake-block__info-item'>
+              <span>Bonus is Active now</span>
+              <b>1 day 15 hours 14 minutes left</b>
+              <p className='stake-block__info-item-progress'></p>
+            </li>
+            :
+            <></>
+        }
       </ul>
     </div>
   )
 }
 
-export default StakeBlock
+export default StakeLpBlock

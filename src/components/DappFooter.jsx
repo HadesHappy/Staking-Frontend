@@ -1,18 +1,16 @@
 import React from 'react'
 import { showBalance } from '../utils/helper'
-import { useStakeEthInfo } from '../hooks/useStakeEthInfo'
 
 const DappFooter = () => {
-  const { totalEth, totalLsEth } = useStakeEthInfo()
 
   return (
     <footer className="dapp-footer">
       <ul className="dapp-footer__info">
         <li>
-          <span>{showBalance(totalEth)}</span> ETH staking
+          <span>{showBalance(0)}</span> ETH staking
         </li>
         <li>
-          <span>{showBalance(totalLsEth)}</span> LSD Staked
+          <span>{showBalance(0)}</span> LSD Staked
         </li>
         <li>
           <span>$0.00</span> Liquidity Staked

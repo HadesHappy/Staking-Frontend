@@ -1,27 +1,36 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useBalance } from '@thirdweb-dev/react'
-import { unstakeLp } from '../contracts/stake'
-import { usePersonalInfo } from '../hooks/usePersonalInfo'
+import { unstakeLp } from '../contracts/lpStaking'
 import { pairTokenAddress } from '../utils/constants'
 import { toast } from 'react-hot-toast'
 import ButtonLoader from './ButtonLoader'
+import { useDispatch, useSelector } from 'react-redux'
+import { stakeLpInfo, getPersonalLpInfo } from '../contracts/info'
+import { useAddress } from '@thirdweb-dev/react'
 
 const UnstakeLPForm = ({ setIsModalVisible }) => {
+  const dispatch = useDispatch()
+  const personalInfo = useSelector(state => state.stakeLpReducer.personalInfo)
+  const address = useAddress()
+
   const { data } = useBalance(pairTokenAddress)
   const [amount, setAmount] = useState()
-  const { stakedLp } = usePersonalInfo()
+
+  useEffect(() => {
+    dispatch(getPersonalLpInfo(address))
+  }, [address])
 
   const handleChange = (e) => {
     setAmount(e.target.value)
   }
 
   const handleMaxClick = () => {
-    setAmount(stakedLp)
+    setAmount(personalInfo.stakedAmount)
   }
 
   const handleUnstakeClick = async () => {
     try {
-      if (amount > 0 && amount <= stakedLp) {
+      if (amount > 0 && amount <= personalInfo.stakedAmount) {
         const response = await unstakeLp(amount)
         if (response.status === 'Success') {
           toast.success('Succeed.')
@@ -56,7 +65,7 @@ const UnstakeLPForm = ({ setIsModalVisible }) => {
       <div className='stake-window__total'>
         <span className='stake-window__subtitle'>Staked amount of LP token</span>
         <button type='button' className='stake-window__max-btn' onClick={handleMaxClick}>Max</button>
-        <b className='stake-window__total-amount'>{stakedLp || 0}</b>
+        <b className='stake-window__total-amount'>{personalInfo.stakedAmount}</b>
       </div>
       <footer className='stake-window__footer'>
         <button type='button' className='gray' onClick={() => setIsModalVisible(false)}>

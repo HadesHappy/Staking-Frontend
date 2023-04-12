@@ -11,7 +11,7 @@ const EthBalance = () => {
 
   return (
     <div className="connect-wallet__balance-item">
-      <img src="img/coins/eth.png" alt='eth' />
+      <img src="/img/coins/eth.png" alt='eth' />
       <b>{showBalance(Number(data?.displayValue)) || 0}</b>
       <p>ETH balance</p>
       <span>${showBalance(Number(data?.value) * ethPrice / (10 ** 18)) || 0} USD</span>
@@ -25,7 +25,7 @@ const LsdBalance = () => {
 
   return (
     <div className="connect-wallet__balance-item">
-      <img src="img/coins/lsd.png" alt='lsd' />
+      <img src="/img/coins/lsd.png" alt='lsd' />
       <b>{showBalance(Number(data?.displayValue)) || 0}</b>
       <p>LSD balance</p>
       <span>${showBalance(Number(data?.value) * lsdPrice / (10 ** 9)) || 0} USD</span>

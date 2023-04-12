@@ -8,16 +8,17 @@ import { useDispatch, useSelector } from 'react-redux'
 import DappDisplayToken from './DappDisplayToken'
 import { lsEthTokenAddress } from '../utils/constants'
 import { usePrice } from '../hooks/usePrice'
-import { useStakeEthInfo } from '../hooks/useStakeEthInfo'
+import { stakeEthInfo } from '../contracts/info'
 
 const DappSectionReceive = ({ setIsModalVisible }) => {
   const stakeType = useSelector(state => state.stakeEthReducer.stakeType)
   const inputValue = useSelector(state => state.stakeEthReducer.inputValue)
+  const ethInfo = useSelector(state => state.stakeEthReducer.ethInfo)
+  const ethLoading = useSelector(state => state.stakeEthReducer.ethLoading)
 
   const dispatch = useDispatch()
 
   const { ethPrice } = usePrice()
-  const { exchangeRate } = useStakeEthInfo()
   const [amount, setAmount] = useState()
 
   let tokenAddress
@@ -34,12 +35,16 @@ const DappSectionReceive = ({ setIsModalVisible }) => {
   }
 
   useEffect(() => {
+    dispatch(stakeEthInfo())
+  }, [])
+
+  useEffect(() => {
     if (stakeType === 'Stake') {
-      setAmount(inputValue / exchangeRate)
+      setAmount(inputValue / ethInfo.lsdExchangeRate)
     } else {
-      setAmount(inputValue * exchangeRate)
+      setAmount(inputValue * ethInfo.lsdExchangeRate)
     }
-  }, [inputValue, exchangeRate, stakeType])
+  }, [inputValue, ethInfo.lsdExchangeRate, stakeType])
 
   return (
     <div className="dapp-section__receive">
@@ -55,7 +60,7 @@ const DappSectionReceive = ({ setIsModalVisible }) => {
         </p>
       </header>
       <div className="dapp-section__receive-actions">
-        <input type="text" placeholder="0,000.000000" value={ amount || 0 } onChange={handleChange} />
+        <input type="text" placeholder="0,000.000000" value={amount || 0} onChange={handleChange} />
         <div className="dapp-section__receive-currency">
           <button
             className="dapp-section__receive-currency-select currency-select"
@@ -68,7 +73,12 @@ const DappSectionReceive = ({ setIsModalVisible }) => {
           </button>
         </div>
       </div>
-      <p className="dapp-section__receive-count">${stakeType === 'UnStake' ? showRate(ethPrice * amount) : showRate(ethPrice * amount * exchangeRate)}</p>
+      {
+        ethLoading ?
+          <p className="dapp-section__receive-count">${stakeType === 'UnStake' ? showRate(ethPrice * amount) : showRate(ethPrice * amount * 1)}</p>
+          :
+          <p className="dapp-section__receive-count">${stakeType === 'UnStake' ? showRate(ethPrice * amount) : showRate(ethPrice * amount * ethInfo.lsdExchangeRate)}</p>
+      }
       <DappSectionInfo />
     </div>
   )

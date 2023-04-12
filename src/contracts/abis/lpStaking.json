@@ -1,5 +1,5 @@
 {
-  "address": "0x7F8ea0146D78d90dbD215956d36a3E6c3694B8f4",
+  "address": "0x0DF3b959fDBBE90431b10Cc9df94959B14720E7c",
   "abi": [
     {
       "inputs": [
@@ -30,36 +30,11 @@
         {
           "indexed": false,
           "internalType": "uint256",
-          "name": "claimTime",
+          "name": "addTime",
           "type": "uint256"
         }
       ],
-      "name": "Claimed",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "userAddress",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "removeTime",
-          "type": "uint256"
-        }
-      ],
-      "name": "RemoveLP",
+      "name": "AddLiquidity",
       "type": "event"
     },
     {
@@ -88,78 +63,41 @@
       "type": "event"
     },
     {
-      "anonymous": false,
       "inputs": [
         {
-          "indexed": true,
-          "internalType": "address",
-          "name": "userAddress",
-          "type": "address"
-        },
-        {
-          "indexed": false,
           "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "stakeTime",
+          "name": "_lsdTokenAmount",
           "type": "uint256"
         }
       ],
-      "name": "StakedLP",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "userAddress",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "unstakeTime",
-          "type": "uint256"
-        }
-      ],
-      "name": "Unstaked",
-      "type": "event"
+      "name": "addLiquidity",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
     },
     {
       "inputs": [],
-      "name": "claimByLP",
+      "name": "claim",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
     },
     {
       "inputs": [],
-      "name": "claimByLSD",
-      "outputs": [],
-      "stateMutability": "nonpayable",
+      "name": "getBonusApr",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
       "type": "function"
     },
     {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_address",
-          "type": "address"
-        }
-      ],
-      "name": "getClaimAmountByLP",
+      "inputs": [],
+      "name": "getBonusPeriod",
       "outputs": [
         {
           "internalType": "uint256",
@@ -178,7 +116,7 @@
           "type": "address"
         }
       ],
-      "name": "getClaimAmountByLSD",
+      "name": "getClaimAmount",
       "outputs": [
         {
           "internalType": "uint256",
@@ -209,14 +147,21 @@
       "type": "function"
     },
     {
-      "inputs": [
+      "inputs": [],
+      "name": "getIsBonusPeriod",
+      "outputs": [
         {
-          "internalType": "address",
-          "name": "_address",
-          "type": "address"
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
         }
       ],
-      "name": "getEarnedByLSD",
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMainApr",
       "outputs": [
         {
           "internalType": "uint256",
@@ -247,25 +192,6 @@
       "type": "function"
     },
     {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_address",
-          "type": "address"
-        }
-      ],
-      "name": "getStakedLSD",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
       "inputs": [],
       "name": "getTotalLPTokenBalance",
       "outputs": [
@@ -280,33 +206,7 @@
     },
     {
       "inputs": [],
-      "name": "getTotalLSD",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "getTotalRewardsByLP",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "getTotalRewardsByLSD",
+      "name": "getTotalRewards",
       "outputs": [
         {
           "internalType": "uint256",
@@ -321,31 +221,65 @@
       "inputs": [
         {
           "internalType": "uint256",
-          "name": "amount",
+          "name": "",
           "type": "uint256"
         }
       ],
-      "name": "removeEth",
-      "outputs": [],
-      "stateMutability": "nonpayable",
+      "name": "histories",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "startTime",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "endTime",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "apr",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bool",
+          "name": "isBonus",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "historyCount",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
       "type": "function"
     },
     {
       "inputs": [
         {
           "internalType": "uint256",
-          "name": "_amount",
+          "name": "_bonusApr",
           "type": "uint256"
         }
       ],
-      "name": "removeLP",
+      "name": "setBonusApr",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
     },
     {
       "inputs": [],
-      "name": "removeLPToken",
+      "name": "setBonusCampaign",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -354,11 +288,24 @@
       "inputs": [
         {
           "internalType": "uint256",
-          "name": "amount",
+          "name": "_days",
           "type": "uint256"
         }
       ],
-      "name": "removeLSD",
+      "name": "setBonusPeriod",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_mainApr",
+          "type": "uint256"
+        }
+      ],
+      "name": "setMainApr",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -380,24 +327,11 @@
       "inputs": [
         {
           "internalType": "uint256",
-          "name": "_lsdTokenAmount",
+          "name": "_amount",
           "type": "uint256"
         }
       ],
-      "name": "stakeLSD",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "_veLSDAmount",
-          "type": "uint256"
-        }
-      ],
-      "name": "unstakeLSD",
+      "name": "unstakeLP",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -420,50 +354,6 @@
         {
           "internalType": "uint256",
           "name": "claimAmount",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "firstTime",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "lastTime",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "earnedAmount",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "name": "usersByLP",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "balance",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "claimAmount",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "firstTime",
           "type": "uint256"
         },
         {

@@ -4,7 +4,6 @@ import ConnectWallet from './components/ConnectWallet'
 import ModalWindow from './components/ModalWindow'
 import PageHeader from './components/PageHeader'
 import Home from './pages/home/Home'
-import Stake from './pages/stake/Stake'
 import { Toaster } from 'react-hot-toast'
 import StakeEthPage from './pages/stakeEthPage/StakeEthPage';
 import StakeLsdPage from './pages/stakeLsdPage/StakeLsdPage';
@@ -29,7 +28,6 @@ function App() {
         <Route path='dapp/stake-eth' element={<StakeEthPage />} />
         <Route path='dapp/stake-lsd' element={<StakeLsdPage />} />
         <Route path='dapp/stake-lp' element={<StakeLpPage />} />
-        <Route path='/stake' element={<Stake />} />
       </Routes>
 
       {

@@ -2,9 +2,8 @@ import React, { useState } from 'react'
 import DappSectionHeader from './DappSectionHeader'
 import DappSectionReceive from './DappSectionReceive'
 import DappSectionWithdraw from './DappSectionWithdraw'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { toast } from 'react-hot-toast'
-import { useStakeEthInfo } from '../hooks/useStakeEthInfo'
 import { useAddress } from '@thirdweb-dev/react'
 import { deposit, withdraw } from '../contracts/deposit'
 import { useBalance } from '@thirdweb-dev/react'
@@ -15,6 +14,7 @@ import ButtonLoader from './ButtonLoader'
 const StakeEth = ({ setIsModalVisible, setCurrentModal }) => {
   const stakeType = useSelector(state => state.stakeEthReducer.stakeType)
   const inputValue = useSelector(state => state.stakeEthReducer.inputValue)
+  const ethInfo = useSelector(state => state.stakeEthReducer.ethInfo)
 
   let tokenAddress
   if (stakeType === 'Stake')
@@ -25,14 +25,13 @@ const StakeEth = ({ setIsModalVisible, setCurrentModal }) => {
   let { data } = useBalance(tokenAddress)
 
   const address = useAddress()
-  const { minimum } = useStakeEthInfo()
 
   const [loading, setLoading] = useState(false);
 
   const handleStake = async () => {
     if (address) {
       if (inputValue !== 0 && inputValue <= data.displayValue) {
-        if (inputValue >= minimum) {
+        if (inputValue >= ethInfo.minimumAmount) {
           setLoading(true)
           const response = await deposit(inputValue)
           if (response.status === 'Success') {
@@ -44,7 +43,7 @@ const StakeEth = ({ setIsModalVisible, setCurrentModal }) => {
               toast.error('Transaction failed by unknown reason.')
           }
         } else {
-          toast.error(`Input Value Error. minimum deposit amount is ${minimum} ETH`)
+          toast.error(`Input Value Error. your input is less than minimum deposit amount.`)
         }
       } else {
         if (inputValue === 0)

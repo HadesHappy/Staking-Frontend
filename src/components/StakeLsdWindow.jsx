@@ -3,8 +3,8 @@ import { lsdTokenAddress, veLsdTokenAddress } from '../utils/constants'
 import { useBalance, useAddress } from '@thirdweb-dev/react'
 import { showBalance, formatLsd } from '../utils/helper'
 import { usePrice } from '../hooks/usePrice'
-import { stakeLsd, unstakeLsd } from '../contracts/stake'
-import { getAllowance, approveLsd } from '../contracts/approve'
+import { stakeLsd, unstakeLsd } from '../contracts/lsdStaking'
+import { getAllowance, approveLsdToLsdStaking } from '../contracts/approve'
 import { toast } from 'react-hot-toast'
 import ButtonLoader from './ButtonLoader'
 
@@ -39,7 +39,7 @@ const StakeLsdWindow = ({ setIsModalVisible }) => {
 
   const handleApproveClick = async () => {
     try {
-      const response = await approveLsd(amount)
+      const response = await approveLsdToLsdStaking(amount)
       if (response.status === 'Success') {
         toast.success('Succeed.')
         setIsApproved(true)

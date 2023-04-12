@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { useStakeEthInfo } from '../../hooks/useStakeEthInfo';
 import SectionHeadTabs from '../../components/SectionHeadTabs';
 import { showBalance } from '../../utils/helper';
 import DappFooter from '../../components/DappFooter';
@@ -10,20 +9,14 @@ import StakeLP from '../../components/StakeLP';
 import LiquidityWindow from '../../components/LiquidityWindow';
 import StakeEth from '../../components/StakeEth';
 import StakeLsdWindow from '../../components/StakeLsdWindow';
-
+import '../dapp/dapp.css';
+import'../stake/stake.css';
 
 const StakeEthPage = () => {
-
-  useEffect(() => {
-    import('../dapp/dapp.css');
-    import('../stake/stake.css');
-  }, []);
-
 
   const [currentHeadTab, setCurrentHeadTab] = useState('Stake ETH');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentModal, setCurrentModal] = useState('select-token');
-  const { totalEth } = useStakeEthInfo();
 
   return (
     <>
@@ -32,7 +25,7 @@ const StakeEthPage = () => {
           <SectionHeadTabs currentHeadTab={currentHeadTab} setCurrentHeadTab={setCurrentHeadTab} />
           <h1 className="dapp-section__title">
             <span>TVL</span>
-            {showBalance(totalEth)}
+            {showBalance(0)}
           </h1>
           <p className="dapp-section__about">Dollar value of total assets staked</p>
         </section>

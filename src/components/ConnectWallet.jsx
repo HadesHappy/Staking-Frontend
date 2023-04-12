@@ -78,8 +78,8 @@ const ConnectWallet = ({ setIsWalletWindowVisible }) => {
         {
           address &&
           <div className="connect-wallet__top-pair">
-            <img src="img/wallet-pair1.png" alt='pair1' />
-            <img src="img/wallet-pair2.png" alt='pair2' />
+            <img src="/img/wallet-pair1.png" alt='pair1' />
+            <img src="/img/wallet-pair2.png" alt='pair2' />
           </div>
         }
       </div>
@@ -108,7 +108,7 @@ const ConnectWallet = ({ setIsWalletWindowVisible }) => {
                       className="connect-wallet__button" key={wallet.name}
                       onClick={() => walletButtonHandle(wallet.name)}
                     >
-                      <img src={`img/wallets/${wallet.img}.png`} alt='wallet_image' />
+                      <img src={`/img/wallets/${wallet.img}.png`} alt='wallet_image' />
                       {wallet.name}
                     </button>
                   )

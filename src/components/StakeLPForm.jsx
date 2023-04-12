@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useAddress, useBalance } from '@thirdweb-dev/react'
 import { pairTokenAddress } from '../utils/constants'
-import { stakeLp } from '../contracts/stake'
+import { stakeLp } from '../contracts/lpStaking'
 import { approveLp, getAllowance } from '../contracts/approve'
 import { toast } from 'react-hot-toast'
 import { formatEther } from '../utils/helper'

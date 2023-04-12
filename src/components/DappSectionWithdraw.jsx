@@ -7,16 +7,17 @@ import { useDispatch, useSelector } from 'react-redux'
 import DappDisplayToken from './DappDisplayToken'
 import { lsEthTokenAddress } from '../utils/constants'
 import { usePrice } from '../hooks/usePrice'
-import { useStakeEthInfo } from '../hooks/useStakeEthInfo'
+import { stakeEthInfo } from '../contracts/info'
 
 const DappSectionWithdraw = ({ setIsModalVisible }) => {
   const stakeType = useSelector(state => state.stakeEthReducer.stakeType)
   const outputValue = useSelector(state => state.stakeEthReducer.outputValue)
+  const ethInfo = useSelector(state => state.stakeEthReducer.ethInfo)
+  const ethLoading = useSelector(state => state.stakeEthReducer.ethLoading)
 
   const dispatch = useDispatch()
 
   const { ethPrice } = usePrice()
-  const { exchangeRate } = useStakeEthInfo()
   const [amount, setAmount] = useState()
 
   let tokenAddress
@@ -38,14 +39,18 @@ const DappSectionWithdraw = ({ setIsModalVisible }) => {
   }
 
   useEffect(() => {
+    dispatch(stakeEthInfo())
+  }, [])
+
+  useEffect(() => {
     if (stakeType === 'Stake') {
-      setAmount(outputValue * exchangeRate)
-      dispatch({ type: ETH_INPUT_CHANGE, payload: outputValue * exchangeRate })
+      setAmount(outputValue * ethInfo.lsdExchangeRate)
+      dispatch({ type: ETH_INPUT_CHANGE, payload: outputValue * ethInfo.lsdExchangeRate })
     } else {
-      setAmount(outputValue / exchangeRate)
-      dispatch({ type: ETH_INPUT_CHANGE, payload: outputValue / exchangeRate })
+      setAmount(outputValue / ethInfo.lsdExchangeRate)
+      dispatch({ type: ETH_INPUT_CHANGE, payload: outputValue / ethInfo.lsdExchangeRate })
     }
-  }, [outputValue, exchangeRate, stakeType, dispatch])
+  }, [outputValue, ethInfo, stakeType, dispatch])
 
   return (
     <div className="dapp-section__withdraw">
@@ -73,7 +78,12 @@ const DappSectionWithdraw = ({ setIsModalVisible }) => {
           </button>
         </div>
       </div>
-      <p className="dapp-section__withdraw-count">${stakeType === 'Stake' ? showRate(ethPrice * amount) : showRate(ethPrice * amount * exchangeRate)}</p>
+      {
+        ethLoading ?
+          <p className="dapp-section__withdraw-count">${stakeType === 'Stake' ? showRate(ethPrice * amount) : showRate(ethPrice * amount * 1)}</p>
+          :
+          <p className="dapp-section__withdraw-count">${stakeType === 'Stake' ? showRate(ethPrice * amount) : showRate(ethPrice * amount * ethInfo?.lsdExchangeRate)}</p>
+      }
     </div>
   )
 }
