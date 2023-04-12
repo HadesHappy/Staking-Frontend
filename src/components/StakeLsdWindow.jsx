@@ -50,6 +50,7 @@ const StakeLsdWindow = ({ setIsModalVisible }) => {
     try {
       setLoading(true)
       const response = await approveLsdToLsdStaking(amount)
+      setLoading(false)
       if (response.status === 'Success') {
         toast.success('Succeed.')
         getTokenAllowance()
@@ -59,11 +60,8 @@ const StakeLsdWindow = ({ setIsModalVisible }) => {
         else
           toast.error('Transaction failed by unknown reason.')
       }
-
-      setLoading(false)
     } catch (error) {
       console.log(error)
-      getTokenAllowance()
     }
   }
 
@@ -73,8 +71,11 @@ const StakeLsdWindow = ({ setIsModalVisible }) => {
         if (amount > 0 && amount <= Number(data.displayValue)) {
           setLoading(true)
           const response = await stakeLsd(amount)
+          setLoading(false)
           if (response.status === 'Success') {
             toast.success('Succeed.')
+            dispatch(stakeLsdInfo())
+            dispatch(getPersonalLsdInfo(address))
             setIsModalVisible(false)
           } else {
             if (response.status === 'Error')
@@ -82,9 +83,6 @@ const StakeLsdWindow = ({ setIsModalVisible }) => {
             else
               toast.error('Transaction failed by unknown reason.')
           }
-          dispatch(stakeLsdInfo())
-          dispatch(getPersonalLsdInfo(address))
-          setLoading(false)
         } else {
           if (amount === '0')
             toast.error('Error: Invalid Input')
@@ -95,17 +93,18 @@ const StakeLsdWindow = ({ setIsModalVisible }) => {
         if (amount > 0 && amount <= Number(data.displayValue)) {
           setLoading(true)
           const response = await unstakeLsd(amount)
+          setLoading(false)
           if (response.status === 'Success') {
             toast.success('Succeed.')
+            dispatch(stakeLsdInfo())
+            dispatch(getPersonalLsdInfo(address))
+            setIsModalVisible(false)
           } else {
             if (response.status === 'Error')
               toast.error(`${response.status}: ${response.error}.`)
             else
               toast.error('Transaction failed by unknown reason.')
           }
-          dispatch(stakeLsdInfo())
-          dispatch(getPersonalLsdInfo(address))
-          setLoading(false)
         } else {
           if (amount === '0')
             toast.error('Error: Invalid Input')
