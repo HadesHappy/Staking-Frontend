@@ -34,8 +34,12 @@ const UnstakeLPForm = ({ setIsModalVisible }) => {
       if (amount > 0 && amount <= personalInfo.stakedAmount) {
         setLoading(true)
         const response = await unstakeLp(amount)
+        setLoading(false)
+
         if (response.status === 'Success') {
           toast.success('Succeed.')
+          dispatch(stakeLpInfo())
+          dispatch(getPersonalLpInfo(address))
           setIsModalVisible(false)
         } else {
           if (response.status === 'Error')
@@ -43,9 +47,6 @@ const UnstakeLPForm = ({ setIsModalVisible }) => {
           else
             toast.error('Transaction failed by unknown reason.')
         }
-        dispatch(stakeLpInfo())
-        dispatch(getPersonalLpInfo(address))
-        setLoading(false)
       } else {
         console.log(amount)
         if (amount === '0')

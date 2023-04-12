@@ -10,8 +10,10 @@ import { useBalance } from '@thirdweb-dev/react'
 import { NATIVE_TOKEN_ADDRESS } from '@thirdweb-dev/sdk'
 import { lsEthTokenAddress } from '../utils/constants'
 import ButtonLoader from './ButtonLoader'
+import { stakeEthInfo } from '../contracts/info'
 
 const StakeEth = ({ setIsModalVisible, setCurrentModal }) => {
+  const dispatch = useDispatch()
   const stakeType = useSelector(state => state.stakeEthReducer.stakeType)
   const inputValue = useSelector(state => state.stakeEthReducer.inputValue)
   const ethInfo = useSelector(state => state.stakeEthReducer.ethInfo)
@@ -34,15 +36,17 @@ const StakeEth = ({ setIsModalVisible, setCurrentModal }) => {
         if (inputValue >= ethInfo.minimumAmount) {
           setLoading(true)
           const response = await deposit(inputValue)
+          setLoading(false)
+
           if (response.status === 'Success') {
             toast.success('Succeed')
+            dispatch(stakeEthInfo())
           } else {
             if (response.status === 'Error')
               toast.error(`${response.status}: ${response.error}.`)
             else
               toast.error('Transaction failed by unknown reason.')
           }
-          setLoading(false)
         } else {
           toast.error(`Input Value Error. your input is less than minimum deposit amount.`)
         }
@@ -62,15 +66,16 @@ const StakeEth = ({ setIsModalVisible, setCurrentModal }) => {
       if (inputValue !== 0 && inputValue <= data.displayValue) {
         setLoading(true)
         const response = await withdraw(inputValue)
+        setLoading(false)
         if (response.status === 'Success') {
           toast.success('Succeed')
+          dispatch(stakeEthInfo())
         } else {
           if (response.status === 'Error')
             toast.error(`${response.status}: ${response.error}.`)
           else
             toast.error('Transaction failed by unknown reason.')
         }
-        setLoading(false)
       } else {
         if (inputValue === 0)
           toast.error('Invalid Input Value.')
@@ -92,12 +97,12 @@ const StakeEth = ({ setIsModalVisible, setCurrentModal }) => {
       {
         stakeType === 'Stake' ?
           <button type="button" className="dapp-section__submit" onClick={handleStake}>
-            { loading === true && <ButtonLoader /> }
+            {loading === true && <ButtonLoader />}
             Stake now
           </button>
           :
           <button type="button" className="dapp-section__submit" onClick={handleUnstake}>
-            { loading === true && <ButtonLoader /> }
+            {loading === true && <ButtonLoader />}
             Unstake now
           </button>
       }
