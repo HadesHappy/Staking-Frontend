@@ -23,7 +23,7 @@ const StakeLpBlock = ({ data, setIsModalVisible, setCurrentWindow }) => {
 
   useEffect(() => {
     if (address)
-      dispatch(getPersonalLpInfo())
+      dispatch(getPersonalLpInfo(address))
   }, [address])
 
   const handleClaimClick = async () => {

@@ -22,7 +22,7 @@ const StakeLsdBlock = ({ setIsModalVisible, setCurrentWindow }) => {
 
   useEffect(() => {
     if (address)
-      dispatch(getPersonalLsdInfo())
+      dispatch(getPersonalLsdInfo(address))
   }, [address])
 
   const handleClaimClick = async () => {
