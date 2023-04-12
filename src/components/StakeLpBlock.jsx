@@ -90,8 +90,12 @@ const StakeLpBlock = ({ data, setIsModalVisible, setCurrentWindow }) => {
               <b>{showRate(personalInfo.stakedAmount)}</b>
           }
           <button onClick={() => {
-            setIsModalVisible(true);
-            setCurrentWindow('liquidity')
+            if (address) {
+              setIsModalVisible(true);
+              setCurrentWindow('liquidity')
+            } else {
+              toast.error('Connect your wallet.')
+            }
           }}
           >
             Add Liquidity

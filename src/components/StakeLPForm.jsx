@@ -14,6 +14,7 @@ const StakeLPForm = ({ setIsModalVisible }) => {
 
   const [amount, setAmount] = useState()
   const [loading, setLoading] = useState(false)
+  const [allowance, setAllowance] = useState()
   const [isApproved, setIsApproved] = useState()
 
   const address = useAddress()
@@ -22,6 +23,7 @@ const StakeLPForm = ({ setIsModalVisible }) => {
   const getTokenAllowance = async () => {
     try {
       const lpAllowance = await getLPTokenAllowance(address)
+      setAllowance(lpAllowance)
       if (formatEther(lpAllowance) < amount)
         setIsApproved(false)
       else
@@ -93,7 +95,10 @@ const StakeLPForm = ({ setIsModalVisible }) => {
 
   const handleChange = (e) => {
     setAmount(e.target.value)
-    getTokenAllowance()
+    if (formatEther(allowance) < e.target.value)
+      setIsApproved(false)
+    else
+      setIsApproved(true)
   }
 
   return (

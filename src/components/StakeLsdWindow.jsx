@@ -15,7 +15,8 @@ const StakeLsdWindow = ({ setIsModalVisible }) => {
   const tabs = ['Stake', 'Unstake'];
 
   const [loading, setLoading] = useState(false)
-  const [activeTab, setActiveTab] = useState('Stake');
+  const [activeTab, setActiveTab] = useState('Stake')
+  const [allowance, setAllowance] = useState()
   const [isApproved, setIsApproved] = useState()
   const [amount, setAmount] = useState()
 
@@ -25,6 +26,8 @@ const StakeLsdWindow = ({ setIsModalVisible }) => {
   const getTokenAllowance = async () => {
     try {
       const lsdAllowance = await getLSDTokenAllowance(address)
+      setAllowance(lsdAllowance)
+
       if (formatLsd(lsdAllowance) < amount)
         setIsApproved(false)
       else
@@ -125,7 +128,10 @@ const StakeLsdWindow = ({ setIsModalVisible }) => {
 
   const handleChange = (e) => {
     setAmount(e.target.value)
-    getTokenAllowance()
+    if (formatLsd(allowance) < e.target.value)
+      setIsApproved(false)
+    else
+      setIsApproved(true)
   }
 
   useEffect(() => {
