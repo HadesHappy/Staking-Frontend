@@ -1,5 +1,5 @@
 {
-  "address": "0x9D8941520bE27Ea6FC1299c9FEF48616d61Fd4E9",
+  "address": "0x3e64d133f8c5Cc6F912828554C87Aeff50cE9c68",
   "abi": [
     {
       "inputs": [
@@ -155,46 +155,12 @@
     },
     {
       "inputs": [],
-      "name": "getTotalRewards",
+      "name": "getStakers",
       "outputs": [
         {
           "internalType": "uint256",
           "name": "",
           "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "name": "histories",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "startTime",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "endTime",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "apr",
-          "type": "uint256"
-        },
-        {
-          "internalType": "bool",
-          "name": "isBonus",
-          "type": "bool"
         }
       ],
       "stateMutability": "view",
@@ -202,7 +168,7 @@
     },
     {
       "inputs": [],
-      "name": "historyCount",
+      "name": "getTotalRewards",
       "outputs": [
         {
           "internalType": "uint256",
@@ -283,40 +249,6 @@
       "name": "unstakeLSD",
       "outputs": [],
       "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "name": "users",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "balance",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "claimAmount",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "lastTime",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "earnedAmount",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
       "type": "function"
     },
     {

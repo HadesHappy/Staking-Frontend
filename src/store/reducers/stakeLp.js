@@ -15,6 +15,7 @@ const initialState = {
     isBonusPeriod: 0,
     totalSupply: 0,
     poolEthAmount: 0,
+    stakers: 0
   },
   lpInfoLoading: false,
   personalInfo: {

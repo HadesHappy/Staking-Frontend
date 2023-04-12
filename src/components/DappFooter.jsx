@@ -36,9 +36,9 @@ const DappFooter = () => {
               <span>$0.00</span> Liquidity Staked
             </li>
         }
-        {/* <li>
-          <span>00</span> Stakers
-        </li> */}
+        <li>
+          <span>{lpInfo.stakers + lsdInfo.stakers}</span> Stakers
+        </li>
         <li>
           <span>${showBalance((lpInfo.totalRewards + lsdInfo.totalRewards) * lsdPrice)}</span> Rewards distributed
         </li>

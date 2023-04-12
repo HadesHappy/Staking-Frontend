@@ -13,6 +13,7 @@ const initialState = {
     mainApr: 0,
     bonusPeriod: 0,
     isBonusPeriod: 0,
+    stakers: 0
   },
   lsdInfoLoading: false,
   personalInfo: {

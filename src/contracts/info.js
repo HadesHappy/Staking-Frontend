@@ -89,6 +89,9 @@ const stakeLsdInfo = () => async dispatch => {
     // Get if now is bonus period
     const getBonusPeriod = Number(await lsdStakingContract.getIsBonusPeriod())
 
+    // Get stakers
+    const stakers = Number(await lsdStakingContract.getStakers())
+
     dispatch({
       type: LSD_INFO, payload: {
         totalStaked: totalLsd,
@@ -97,6 +100,7 @@ const stakeLsdInfo = () => async dispatch => {
         mainApr: lsdMainApr,
         bonusPeriod: lsdBonusPeriod,
         isBonusPeriod: getBonusPeriod,
+        stakers: stakers
       }
     })
     dispatch({ type: LSD_INFO_LOADING, payload: false })
@@ -130,6 +134,9 @@ const stakeLpInfo = () => async dispatch => {
     // Get if now is bonus period
     const getBonusPeriod = Number(await lpStakingContract.getIsBonusPeriod())
 
+    // Get stakers
+    const stakers = Number(await lpStakingContract.getStakers())
+
     // Get total Lp 
     const totalLpSupply = formatEther(await pairTokenContract.totalSupply())
 
@@ -146,6 +153,7 @@ const stakeLpInfo = () => async dispatch => {
         isBonusPeriod: getBonusPeriod,
         totalSupply: totalLpSupply,
         poolEthAmount: poolEthAmount,
+        stakers: stakers
       }
     })
     dispatch({ type: LP_INFO_LOADING, payload: false })

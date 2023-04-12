@@ -1,5 +1,5 @@
 {
-  "address": "0x03e1Ff020627B08ABCC51103a7A43985623415bb",
+  "address": "0x2796529b9Df1b29fAe9625Bf3877799Ad4eDCD5D",
   "abi": [
     {
       "inputs": [
@@ -181,6 +181,19 @@
         }
       ],
       "name": "getStakedLP",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getStakers",
       "outputs": [
         {
           "internalType": "uint256",
