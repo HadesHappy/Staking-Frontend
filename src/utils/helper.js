@@ -65,7 +65,7 @@ const showTvl = (amount) => {
   // }
   // else
   //   return tvlString
-  return tvlString.toLocaleString();
+  return amount.toLocaleString();
 }
 
 function addStr(str, index, stringToAdd) {
