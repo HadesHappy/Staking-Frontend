@@ -16,6 +16,14 @@ const StakeLsdBlock = ({ setIsModalVisible, setCurrentWindow }) => {
   const personalInfoLoading = useSelector(state => state.stakeLsdReducer.personalInfoLoading)
   const [loading, setLoading] = useState(false)
 
+  const ONE_DAY_IN_SECS = 24 * 60 * 60
+
+  const [days, setDays] = useState(0)
+  const [hours, setHours] = useState(0)
+  const [mins, setMins] = useState(0)
+  const [secs, setSecs] = useState(0)
+  const [width, setWidth] = useState(0)
+
   useEffect(() => {
     dispatch(stakeLsdInfo())
   }, [])
@@ -24,6 +32,26 @@ const StakeLsdBlock = ({ setIsModalVisible, setCurrentWindow }) => {
     if (address)
       dispatch(getPersonalLsdInfo(address))
   }, [address])
+
+  const calculateTimeLeft = () => {
+    let endTime = lsdInfo.isBonusPeriod + lsdInfo.bonusPeriod * ONE_DAY_IN_SECS
+    const difference = Math.floor(endTime - new Date().getTime() / 1000);
+    if (difference > 0) {
+      setDays(Math.floor(difference / ONE_DAY_IN_SECS))
+      setHours(Math.floor(((difference % ONE_DAY_IN_SECS) / (60 * 60))))
+      setMins(Math.floor(((((difference % ONE_DAY_IN_SECS)) % (60 * 60)) / 60)))
+      setSecs(Math.floor(((((difference % ONE_DAY_IN_SECS)) % (60 * 60)) % 60)))
+      setWidth(Math.floor(difference * 100 / (lsdInfo.bonusPeriod * ONE_DAY_IN_SECS)))
+    }
+  }
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      calculateTimeLeft()
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  });
 
   const handleClaimClick = async () => {
     if (address) {
@@ -47,12 +75,6 @@ const StakeLsdBlock = ({ setIsModalVisible, setCurrentWindow }) => {
     } else {
       toast.error('Connect your wallet.')
     }
-  }
-
-  if (lsdInfo.isBonusPeriod > 0){
-    const dateObj = new Date(lsdInfo.isBonusPeriod * 1000)
-    const period = lsdInfo.bonusPeriod
-    
   }
 
   return (
@@ -179,11 +201,11 @@ const StakeLsdBlock = ({ setIsModalVisible, setCurrentWindow }) => {
           }
         </li>
         {
-          !lsdInfoLoading && lsdInfo.isBonusPeriod ?
+          lsdInfo.isBonusPeriod ?
             <li className='stake-block__info-item'>
               <span>Bonus is Active now</span>
-              <b>1 day 15 hours 14 minutes left</b>
-              <p className='stake-block__info-item-progress'></p>
+              <b>{days} day {hours} hours {mins} minutes {secs} secs left</b>
+              <p className='stake-block__info-item-progress' style={{ width: `${width}%` }}></p>
             </li>
             :
             <></>
