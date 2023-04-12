@@ -29,7 +29,7 @@ const Tvl = () => {
           </h1>
           :
           <h1 className="dapp-section__title">
-            <span>TVL</span>
+            <span>TVL</span>$
             {showTvl(ethAmount * ethPrice + lsdAmount * lsdPrice + lpInfo.totalStaked * lpInfo.poolEthAmount * ethPrice / (lpInfo.totalSupply))}
           </h1>
       }

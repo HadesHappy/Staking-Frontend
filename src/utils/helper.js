@@ -58,8 +58,24 @@ const showTvl = (amount) => {
   let tvlString = amount + ''
   const dotLocation = tvlString.search(reDot)
   tvlString = tvlString.slice(0, dotLocation)
-  return tvlString
+  let string
+  if (isNonEmptyString(tvlString) && tvlString.length % 2 === 0 && tvlString.slice(-1) !== ",") {
+    let index = tvlString.length - 1;
+    tvlString = addStr(tvlString, index, ",");
+    return tvlString
+  }
+  else
+    return string
 }
+
+function addStr(str, index, stringToAdd) {
+  return str.substring(0, index) + stringToAdd + str.substring(index, str.length);
+}
+
+function isNonEmptyString(str) {
+  return str && str.length > 0;
+}
+
 export {
   showAddress,
   showBalance,
