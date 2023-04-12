@@ -1,5 +1,5 @@
 import { ethers } from 'ethers'
-import { parseLsd, parseEther, formatLsd } from '../utils/helper'
+import { parseLsd, parseEther } from '../utils/helper'
 import lpStaking from './abis/lpStaking.json'
 
 const getSigner = () => {
@@ -12,7 +12,7 @@ const stakeLp = async (amount) => {
   try {
     const signer = getSigner()
     const stakingContract = new ethers.Contract(lpStaking.address, lpStaking.abi, signer)
-    const tx1 = await stakingContract.stakeLP(parseLsd(amount))
+    const tx1 = await stakingContract.stakeLP(parseEther(amount))
     const receipt = await tx1.wait()
 
     if (receipt?.status === 1)
@@ -34,7 +34,7 @@ const unstakeLp = async (amount) => {
   try {
     const signer = getSigner()
     const stakingContract = new ethers.Contract(lpStaking.address, lpStaking.abi, signer)
-    const tx1 = await stakingContract.unstakeLP(parseLsd(amount))
+    const tx1 = await stakingContract.unstakeLP(parseEther(amount))
     const receipt = await tx1.wait()
 
     if (receipt?.status === 1)
